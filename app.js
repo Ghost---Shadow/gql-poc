@@ -1,11 +1,24 @@
+const { default: axios } = require('axios');
 const express = require('express');
-const bodyParser = require('body-parser');
 const graphqlHttp = require('express-graphql');
 const { buildSchema } = require('graphql');
 
 const app = express();
 
-app.use(bodyParser.json());
+app.use(express.json());
+
+const BOOK_SERVER = 'http://localhost:3001';
+const PAINTING_SERVER = 'http://localhost:3002';
+
+const bookResolver = (id) => async () => {
+  const response = await axios.get(`${BOOK_SERVER}/books/${id}`);
+  return response.data
+}
+
+const paintingResolver = (id) => async () => {
+  const response = await axios.get(`${PAINTING_SERVER}/paintings/${id}`);
+  return response.data
+}
 
 app.use(
   '/graphql',
@@ -35,16 +48,17 @@ app.use(
         const { id } = args;
         return {
           name: `Artist ${id}`,
-          books: ['Book 1', 'Book 2'],
-          paintings: ['Painting 1', 'Painting 2'],
+          books: bookResolver(id),
+          paintings: paintingResolver(id),
         }
       },
       createArtist: (args) => {
         const { name } = args;
+        // TODO: POST calls
         return {
           name,
-          books: ['Book 1', 'Book 2'],
-          paintings: ['Painting 1', 'Painting 2'],
+          books: bookResolver(id),
+          paintings: paintingResolver(id),
         }
       }
     },

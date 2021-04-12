@@ -5,11 +5,14 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon -L app.js"
+    "start": "nodemon -L app.js",
+    "start:books": "nodemon -L books.js",
+    "start:paintings": "nodemon -L paintings.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.21.1",
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
     "express-graphql": "^0.7.1",
